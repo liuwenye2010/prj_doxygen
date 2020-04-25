@@ -1,0 +1,149 @@
+/*------------------------------------------------------------------------------
+
+
+  File Name: example.dox
+
+------------------------------------------------------------------------------*/
+
+/**
+  \mainpage exp_prj_dox
+  
+  \tableofcontents
+  
+  \section intro Introduction
+  
+  This web-page describes the simple APIs, 
+  which can be used by customer's to develop their own applications
+  <hr>
+  \section apis SoC APIs
+
+  These APIs are classified as follows:
+
+  -# \ref TopLevelAPIs  : These Top-Level APIs can be used to Control SOC 
+                          The member APIs in this main API category are:
+    - \ref CtrlAPIs
+  -# \ref MidLevelAPIs  : These Mid-level APIs consist of the hardware interfaces to the Top-level APIs
+    - \ref CmdAPI
+  -# \ref InterfaceAPIs : These bottom layer APIs handle the low level communication with the host hardware.
+                          There are 2 APIs, one for each of the hardware interfaces on SOC.
+    - \ref I2CInterfaceAPI : The I2C Interface API is implemented by the following interfaces
+      - \ref I2CdevIntf
+      - \ref SienaI2CIntf 
+	  - \ref AlsaIIntf
+	  - \ref Module_A_API
+	- \ref USBInterfaceAPI : The USB Interface API is implemented by the following interfaces
+	  - \ref LibUsbIntf
+	  - \ref WinHIDIntf
+	  - \ref Module_B_API
+
+    \note  
+     - The \ref InterfaceAPIs are host specific. Example APIs using Linux and Windows Operating System are included in this package. 
+       for the popular OS+ARM groups. E-SOC calls each such group as a VARIANT. The Table below shows VARIANT definitions. 
+       In case, the suitable library is not available in the table below, Customers need to provide the target toolchain and compiler 
+       options to E-SOC for compiling them.
+        VARIANT                     | Architecture |  OS           |  Toolchains                                         |  Comments
+       :-------:                    |:------------:| :--:          | :----------:                                        | :--------:
+       android_armv7-a              | armv7-a      | Android 32bit | arm-linux-androideabi-4.9                           | Standard alone toolchain generated from Android NKD
+       linux_armv7-a                | armv7-a      | Linux 32bit   | gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabi   | -	
+       linux_armv7-a_hf / linux_rpi | armv7-a      | Linux 32bit   | gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf | For Raspberry Pi.
+       linux64_armv8-a              | armv8-a      | Linux 64bit   | gcc-linaro-4.9.4-2017.01-x86_64_aarch64-linux-gnu   | -	
+       android64_armv8-a            | armv8-a      | Android 64bit | aarch64-linux-androideabi-4.9                       | Standard alone toolchain generated from Android NKD
+  <hr>
+  
+  <hr>
+
+*/
+/**  
+
+  \defgroup TopLevelAPIs Top-level APIs
+  These Top-level APIs can be used by the Host User applications to:
+  - Control SOC or get their status via I2C/USB interfaces
+  @{
+    \defgroup CtrlAPIs SOC Control and Status APIs
+    These Top-Level APIs can be used to Control SOC and get their statuses.
+  @}
+
+  \defgroup MidLevelAPIs Mid-level APIs
+  These Mid-Level APIs:
+  - These APIs are not designed to be used directly by the Host User applications. 
+  @{
+     \defgroup CmdAPI Send Command API
+     This API supports sending commands to SOC 
+     
+  @}
+
+  \defgroup InterfaceAPIs Interface APIs
+  This bottom layer API does the actual low level 
+  communication using the I2C and USB interfaces.
+  - The Mid-level and Top-level APIs use this API to communicate with the
+    host hardware.
+  - On RTOS systems, these are the APIs which need to be implemented by the host
+    OS.
+  - There are 2 interface APIs one for each of the 2 hardware interfaces by which one can talk to SOC
+    - \ref I2CInterfaceAPI
+    - \ref USBInterfaceAPI
+  @{
+    \defgroup I2CInterfaceAPI I2C Interface API
+    This API is used for communicating with the SOC using the I2C interface.
+    This API is implemented by the following interfaces.
+    Only one of these interfaces need to be compiled and linked into the Host User application
+    - \ref I2CdevIntf
+    - \ref SienaI2CIntf
+    - \ref AlsaIIntf
+    @{
+      \defgroup I2CdevIntf I2C Interface using i2c-dev Linux driver for Linux based host
+      This interface is used for communicating with SOC using Linux's i2c-dev driver.
+      The information about Linux's i2c-dev driver can be found at 
+      <a ref="https://www.kernel.org/doc/Documentation/i2c/dev-interface">
+      https://www.kernel.org/doc/Documentation/i2c/dev-interface</a>.
+      This interface also has a thin-layer to send information over to the SOC using
+      facilities provided by the Linux's i2c-dev driver
+  
+      \defgroup SienaI2CIntf I2C Interface using Cypress CY7C68013A Windows driver for Windows based host
+      This interface is used for communicating with SOC using Cypress CY7C68013A 
+      Windows driver.
+      The information about Cypress CY7C68013A USB-to-I2C controller can be found at 
+      <a ref="http://www.cypress.com/file/138911/download">
+      http://www.cypress.com/file/138911/download</a>.
+      This interface also has a thin-layer to send information over to the SOC using
+      facilities provided by the Cypress CY7C68013A Windows driver.
+      
+      \defgroup AlsaIIntf I2C Interface using SOC ALSA Linux driver for Linux based host 
+      This interface is used for communicating with SOC using SOC
+      ALSA Linux driver.
+      The information about Linux's ALSA driver can be found at 
+      <a ref="https://www.alsa-project.org/alsa-doc/alsa-lib/asoundlib_8h.html">
+      https://www.alsa-project.org/alsa-doc/alsa-lib/asoundlib_8h.html</a>.
+      This interface also has a thin-layer to send information over to the SOC using
+      facilities provided by the SOC's ALSA Linux driver
+      \todo Add link to ALSA driver for CX2092X
+
+    @}
+    
+    \defgroup USBInterfaceAPI USB Interface API
+    This API is used for communicating with the SOC using the USB interface 
+    This API is implemented by the following interfaces.
+    Only one of the these interfaces need to be compiled and linked into the Host User application
+    - \ref LibUsbIntf
+    - \ref WinHIDIntf
+
+    @{
+      \defgroup LibUsbIntf USB Interface using libusb library for Linux based host
+      This interface is used for communicating with SOC using libusb library.
+      The libusb source-code and precompiled library can be got from <a ref="http://libusb.info/">
+      http://libusb.info/</a>.
+      This interface has a thin-layer to send information over to the SOC using
+      facilities provided by the libusb library
+  
+      \defgroup WinHIDIntf USB Interface using Windows HID Driver for Windows based host
+      This interface is used for communicating with SOC using Windows' HID driver.
+      The information about Windows HID driver can be found at 
+      <a ref="https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/">
+      https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/</a>.
+      This interface also has a thin-layer to send information over to the SOC using
+      facilities provided by the Windows' HID driver
+    @}
+  @}
+
+*/
+

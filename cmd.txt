@@ -1,0 +1,3 @@
+install doxygen 
+make clean 
+make
